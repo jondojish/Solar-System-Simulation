@@ -20,8 +20,8 @@ ZOOM_FACTOR = 1.2
 Body.set_metres_per_pixel(10**9)
 sun = Body(radius=7*10**9.5, mass=1.989*10**30, vel=Vector(0, 0), pos=Vector(WIDTH*0.5, HEIGHT*0.5), color="yellow")
 jupiter = Body(radius=7*10**9.5,mass=1.898*10**27, pos=Vector(WIDTH*0.5, sun.pos.y + 7.779 * 10**11), vel=Vector(13*10**3, 0), color="red")
-jupiter.vel = Vector(0,0)
-# earth = Body(radius=7*10**9.5, mass=6*10**26, vel=Vector(30 * 10**3, 0), pos=Vector(WIDTH * 0.25, sun.pos.y - 1.5 * 10**11), color="blue")
+# jupiter.vel = Vector(0,0)
+earth = Body(radius=7*10**9.5, mass=6*10**26, vel=Vector(30 * 10**3, 0), pos=Vector(WIDTH * 0.25, sun.pos.y - 1.5 * 10**11), color="blue")
 
 # used to put all bodies in correct positions on display
 anchor_body = Body.bodies[0]
@@ -38,6 +38,7 @@ drag = False
 time_multiplier = 1
 multiplier_base = 2
 time_elapsed = 0
+time_rewind = False
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -75,14 +76,12 @@ while running:
     elif not keys[pygame.K_s]:
         s_down = False
     if keys[pygame.K_d] and d_down == False:
-        # time_multiplier *= 3
-        time_multiplier += 1
+        time_multiplier += 3
         d_down = True
     elif not keys[pygame.K_d]:
         d_down = False
     if keys[pygame.K_a] and a_down == False:
-        # time_multiplier /= 3
-        time_multiplier -= 1
+        time_multiplier -= 3
         a_down = True
     elif not keys[pygame.K_a]:
         a_down = False
@@ -95,11 +94,8 @@ while running:
         Body.update(dt*multiplier_base**(time_multiplier-1))
         time_elapsed += dt*multiplier_base**(time_multiplier-1)
         displayed_multiplier = multiplier_base**(time_multiplier-1)
-    elif time_multiplier < 0:
-        Body.update(-dt*multiplier_base**abs(time_multiplier))
-        time_elapsed -= dt*multiplier_base**abs(time_multiplier+1)
-        displayed_multiplier = -multiplier_base**abs(time_multiplier+1)
-    elif time_multiplier == 0:
+    else:
+        time_multiplier = 0
         displayed_multiplier = 0
 
     # time_elapsed += dt*time_multiplier

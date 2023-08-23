@@ -115,7 +115,9 @@ class Body:
                             print("done")
                             print(1/ 0)
                         b1.add_force(cls.get_gravity(b1, b2))
+                print("accel", b1.get_accel().multiply(dt).to_string())
                 b1.vel.add(b1.get_accel().multiply(dt))
+                print("vel", b1.vel.to_string())
                 b1.pos.add(b1.vel.multiply(dt))
                 b1.display_pos.add(b1.vel.multiply(dt).multiply(1 / cls.metres_per_pixel))
         else:
@@ -132,7 +134,6 @@ class Body:
         cls.bodies.remove(body)
 
     def get_gravity(self, body):
-        print(self.pos.to_string(), body.pos.to_string())
         # F = -GMm/(r^2) 
         magnitude = (self.G * self.mass * body.mass) / ((Vector.sum(self.pos, body.pos.negative()).get_magnitude()) ** 2)
         direction = Vector.sum(body.pos, self.pos.negative()).get_unit()
